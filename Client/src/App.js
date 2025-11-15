@@ -1,8 +1,8 @@
 import React from "react";
 import Navigator from "./Components/Navigator";
-import Dashboard from "./Components/Dashboard";
+import Dashboard from "./Components/Dashboard/Dashboard";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Orders from "./Components/Orders";
+import Orders from "./Components/Orders/Orders";
 
 export default function App() {
   return (
