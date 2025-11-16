@@ -1,0 +1,18 @@
+.inventory-search-row { padding: 18px; border-bottom: 1px solid var(--color-border);}
+.inventory-search { position: relative; max-width: 320px;}
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+  font-size: 20px;
+}
+.inventory-search-input {
+  width: 100%;
+  padding: 8px 16px 8px 40px;
+  font-size: 15px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}

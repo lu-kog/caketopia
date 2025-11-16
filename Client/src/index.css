@@ -1,0 +1,22 @@
+:root {
+  --color-primary: #6366F1;
+  --color-surface: #fff;
+  --color-surface-dark: #334155;
+  --color-bg: #F8FAFC;
+  --color-bg-dark: #1E293B;
+  --color-border: #E2E8F0;
+  --color-border-dark: #475569;
+  --color-text-primary: #1E293B;
+  --color-text-primary-dark: #F8FAFC;
+  --color-text-secondary: #64748B;
+  --color-text-secondary-dark: #94A3B8;
+  --radius: 8px;
+  --font-main: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-main);
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  margin: 0;
+}

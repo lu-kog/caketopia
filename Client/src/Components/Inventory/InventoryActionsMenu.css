@@ -1,0 +1,8 @@
+.dropdown-action {
+  width: 100%; display: flex; align-items: center;
+  padding: 10px 20px; background: none; border: none; color: var(--color-text-primary);
+  font-size: 15px; cursor: pointer; text-decoration: none;
+  border-radius: 8px; transition: background 0.18s;
+}
+.dropdown-action:hover { background: var(--color-bg);}
+.dropdown-action.delete { color: #e3342f;}

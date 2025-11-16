@@ -1,0 +1,23 @@
+.row-flex{display:flex;align-items:center;}
+.row-icon {
+  width: 36px; height: 36px; border-radius: 9px; background: rgba(99,102,241,0.10);
+  display: flex; align-items:center; justify-content:center; margin-right: 14px;
+}
+.inventory-dropdown { position: relative; display: inline-block; }
+.inventory-dropdown-btn {
+  padding: 7px; border-radius: 50%; background: transparent;
+  border: none; color: var(--color-text-secondary); cursor:pointer; font-size: 19px;
+}
+.inventory-dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 38px;
+  min-width: 170px;
+  background: var(--color-surface);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(99,102,241,0.09);
+  border: 1px solid var(--color-border);
+  z-index: 10;
+}
+.inventory-dropdown.open .inventory-dropdown-menu { display: block;}

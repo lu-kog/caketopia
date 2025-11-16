@@ -1,0 +1,25 @@
+.inventory-page {
+  padding: 36px 26px 0 26px;
+  background: var(--color-bg);
+  min-height: 100vh;
+}
+.page-top { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px;}
+@media (min-width: 600px) {
+  .page-top { flex-direction: row; justify-content: space-between; align-items: center;}
+}
+.page-title { font-size: 28px; font-weight: bold; color: var(--color-text-primary);}
+.page-add-btn {
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 500;
+  padding: 10px 32px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(99,102,241,0.12);
+  transition: opacity 0.2s;
+}
+.page-add-btn:hover { opacity: 0.93; }

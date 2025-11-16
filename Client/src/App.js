@@ -1,27 +1,26 @@
 import React from "react";
-import Navigator from "./Components/Navigator";
-import Dashboard from "./Components/Dashboard/Dashboard";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Orders from "./Components/Orders/Orders";
+import Sidebar from "./Components/Layout/Sidebar";
+import Header from "./Components/Layout/Header";
+import InventoryPage from "./Components/Inventory/InventoryPage";
+import "./App.css";
 
-export default function App() {
+function App() {
   return (
     <BrowserRouter>
-      <div style={{ padding: "30px", background: "#f2f4f7", minHeight: "100vh", display: "flex" }}>
-        <div style={{ paddingLeft: "40px" }}>
-          <Navigator />
-        </div>
-
-        <div>
+      <div className="main-layout">
+        <Sidebar />
+        <div className="content-area">
+          <Header />
           <Routes>
-            <Route path="/dashboard" element={<Dashboard />}></Route>
-            <Route path="/orders" element={<Orders />}></Route>
-            <Route path="/costing" element={<Dashboard />}></Route>
-            <Route path="/inventory" element={<Dashboard />}></Route>
+            <Route path="/inventory" element={<InventoryPage />} />
+            {/* Add other routes here */}
+            <Route path="/" element={<InventoryPage />} />
           </Routes>
         </div>
-
       </div>
     </BrowserRouter>
   );
 }
+
+export default App;
