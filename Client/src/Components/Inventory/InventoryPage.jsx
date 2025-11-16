@@ -1,51 +1,131 @@
-import React, { useState, useEffect } from "react";
-import "./InventoryPage.css";
-import InventoryStats from "./InventoryStats";
-import InventorySearchBar from "./InventorySearchBar";
+import React, { useEffect, useState, useRef } from "react";
+import { getInventory } from "../../services/inventoryApi";
 import InventoryTable from "./InventoryTable";
-import InventoryPagination from "./InventoryPagination";
+import Pagination from "./Pagination";
+import "./Inventory.css";
 
-function InventoryPage() {
-  const [items, setItems] = useState([]);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
+export default function InventoryPage() {
+    const [items, setItems] = useState([]);
+    const [search, setSearch] = useState("");
+    const [showLowStock, setShowLowStock] = useState(false);
+    const [adding, setAdding] = useState(false);
 
-  const itemsPerPage = 5;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  useEffect(() => {
-    fetch("http://localhost:5000/api/inventory")
-      .then(res => res.json())
-      .then(setItems);
-  }, []);
+    const tableRef = useRef(null);
 
-  // Filter and paginate
-  const searchedItems = items.filter(item =>
-    item.name?.toLowerCase().includes(search.toLowerCase())
-  );
-  const totalPages = Math.max(1, Math.ceil(searchedItems.length / itemsPerPage));
-  const displayedItems = searchedItems.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+    useEffect(() => {
+        loadItems();
+        calculateRowsPerPage();
+        window.addEventListener("resize", calculateRowsPerPage);
 
-  return (
-    <div className="inventory-page">
-      <div className="page-top">
-        <span className="page-title">Inventory</span>
-        <button className="page-add-btn">
-          <span className="material-symbols-outlined" style={{ marginRight: 7 }}>add</span>
-          Add New Item
-        </button>
-      </div>
-      <InventoryStats items={items} />
-      <div className="inventory-table-box">
-        <InventorySearchBar value={search} onChange={setSearch}/>
-        <InventoryTable items={displayedItems}/>
-        <InventoryPagination
-          page={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
-      </div>
-    </div>
-  );
+        return () => window.removeEventListener("resize", calculateRowsPerPage);
+    }, []);
+
+    async function loadItems() {
+        const data = await getInventory();
+        setItems(data);
+    }
+
+    function calculateRowsPerPage() {
+        setRowsPerPage(9);
+    }
+
+    // FILTER ITEMS
+    const filteredItems = items.filter((item) => {
+        const matchSearch = item.name.toLowerCase().includes(search.toLowerCase());
+        const matchLow =
+            showLowStock ? item.stock < item.low_stock_threshold : true;
+        return matchSearch && matchLow;
+    });
+
+    // PAGINATION
+    const indexOfLast = currentPage * rowsPerPage;
+    const indexOfFirst = indexOfLast - rowsPerPage;
+    const paginatedItems = filteredItems.slice(indexOfFirst, indexOfLast);
+
+    const totalPages = Math.ceil(filteredItems.length / rowsPerPage);
+
+    const totalWorth = items.reduce(
+        (sum, item) => sum + item.stock * item.price_per_unit,
+        0
+    );
+
+    return (
+        
+        <div className="inv-page">
+            <h1>Inventory</h1>
+            {/* Stats */}
+            <div className="inv-stats-container">
+                <div className="inv-stat-box">
+                    <p className="inv-stat-label">Number of Items</p>
+                    <p className="inv-stat-value">{items.length}</p>
+                </div>
+
+                <div className="inv-stat-box">
+                    <p className="inv-stat-label">Inventory Worth</p>
+                    <p className="inv-stat-value">₹{totalWorth.toFixed(2)}</p>
+                </div>
+            </div>
+
+            {/* Search + Filter */}
+            <div className="inv-toolbar">
+                <div className="inv-search-wrapper">
+                    <span className="material-symbols-outlined inv-search-icon">search</span>
+                    <input
+                        type="text"
+                        placeholder="Search items..."
+                        value={search}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setCurrentPage(1); // reset page on search
+                        }}
+                        className="inv-search-input"
+                    />
+                </div>
+
+                <label className="inv-checkbox-label">
+                    <input
+                        type="checkbox"
+                        checked={showLowStock}
+                        onChange={() => {
+                            setShowLowStock(!showLowStock);
+                            setCurrentPage(1);
+                        }}
+                        className="inv-checkbox"
+                    />
+                    Show low stock items only
+                </label>
+
+                <button
+                    className="inv-add-btn"
+                    onClick={() => setAdding(true)}
+                >
+                    + Add New Item
+                </button>
+            </div>
+
+            {/* Table */}
+            <div className="inv-table-container" ref={tableRef}>
+                <InventoryTable
+                    items={paginatedItems}
+                    adding={adding}
+                    cancelAdd={() => setAdding(false)}
+                    saveNew={(item) => {
+                        setAdding(false);
+                        loadItems(); // reload DB
+                    }}
+                />
+
+            </div>
+
+            {/* Pagination */}
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
+            />
+        </div>
+    );
 }
-
-export default InventoryPage;

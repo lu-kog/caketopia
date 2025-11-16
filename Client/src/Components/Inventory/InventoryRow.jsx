@@ -1,51 +1,37 @@
-import React, { useState } from "react";
-import "./InventoryRow.css";
-import InventoryActionsMenu from "./InventoryActionsMenu";
+import React from "react";
 
-// Icon mapping for row avatars
-const iconMap = {
-  Flour: "grain",
-  Eggs: "egg",
-  Sugar: "ac_unit",
-  Vanilla: "water_drop",
-  Buttercream: "icecream",
-  Chocolate: "cookie",
-  Milk: "water"
-};
-
-function InventoryRow({ item }) {
-  const [showMenu, setShowMenu] = useState(false);
-  let icon = "inventory_2";
-  for (let key in iconMap) {
-    if (item.name.toLowerCase().includes(key.toLowerCase())) icon = iconMap[key];
-  }
+export default function InventoryRow({ item }) {
+  const low = item.stock < item.low_stock_threshold;
 
   return (
-    <tr>
+    <tr className="inv-row">
       <td>
-        <div className="row-flex">
-          <span className="row-icon">
-            <span className="material-symbols-outlined" style={{ fontSize:22, color:'var(--color-primary)' }}>{icon}</span>
-          </span>
+        <div className="inv-item">
+          <div className="inv-icon-box">{item.icon_emoji || "📦"}</div>
           {item.name}
         </div>
       </td>
-      <td>{`INV${String(item.id).padStart(3,"0")}`}</td>
-      <td className="text-right">{item.stock}</td>
-      <td>{item.unit}</td>
-      <td className="text-right">₹ {item.price_per_unit}</td>
-      <td className="text-right">
-        <div className={`inventory-dropdown${showMenu ? " open" : ""}`}>
-          <button className="inventory-dropdown-btn" onClick={() => setShowMenu(!showMenu)}>
-            <span className="material-symbols-outlined">more_horiz</span>
-          </button>
-          <div className="inventory-dropdown-menu">
-            <InventoryActionsMenu onClose={() => setShowMenu(false)} />
-          </div>
-        </div>
+
+      <td className="muted">{item.id}</td>
+
+      <td className={low ? "low-stock right" : "right"}>
+        {low && (
+          <span className="material-symbols-outlined warning-icon">
+            warning
+          </span>
+        )}
+        {item.stock}
+      </td>
+
+      <td className="muted">{item.unit}</td>
+
+      <td className="right muted">₹{item.price_per_unit}</td>
+
+      <td className="center">
+        <button className="inv-action-btn">
+          <span className="material-symbols-outlined">more_horiz</span>
+        </button>
       </td>
     </tr>
   );
 }
-
-export default InventoryRow;
