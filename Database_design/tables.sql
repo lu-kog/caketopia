@@ -1,7 +1,3 @@
-DROP DATABASE IF EXISTS caketopia;
-CREATE DATABASE caketopia;
-
-\c caketopia
 
 CREATE TABLE inventory (
     id SERIAL PRIMARY KEY,

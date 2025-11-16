@@ -27,30 +27,46 @@ Ensure you have **Node.js ≥ 18** and **npm** installed.
 npm install
 ```
 
-### 3. Start The Application
+### 3.0 Setup the Database
+
+(if postgres not installed)  -- to check `psql --version`
 
 ```bash
+sudo apt install postgresql postgresql-contrib
+```
+
+Login psql
+
+```bash
+psql postgres
+```
+
+```sql
+CREATE USER caketopiadevuser WITH PASSWORD 'NDVY';
+DROP DATABASE IF EXISTS caketopia;
+CREATE DATABASE caketopia OWNER caketopiadevuser;
+GRANT ALL PRIVILEGES ON DATABASE caketopia TO caketopiadevuser;
+
+\c caketopia
+
+```
+
+#### load tables and dummy data
+
+copy from  [Database_design/tables.sql](Database_design/tables.sql) and paste on db
+
+
+### 3.1 Start The Application
+
+```bash
+cd Server
+npm start
+
+cd ../Client
 npm start
 ```
 
 The app runs locally at: [http://localhost:3000](http://localhost:3000)
-
----
-
-## 🗂️ Project Structure
-
-```
-Client/
-  src/
-    Components/
-      Orders/
-      Dashboard/
-      ...other components
-    App.js
-    index.js
-  public/
- README.md
-```
 
 ---
 
