@@ -14,6 +14,7 @@ ADD CONSTRAINT unit_allowed CHECK (
     unit IN ('Kg', 'Grams', 'Pcs', 'Ltr', 'Ml')
 );
 
+GRANT ALL PRIVILEGES ON TABLE inventory TO caketopiadevuser;
 
 INSERT INTO inventory (icon_emoji, name, stock, unit, price_per_unit, low_stock_threshold)
 VALUES
